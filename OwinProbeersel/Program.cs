@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using OwinProbeersel.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
     .AddNegotiate();
+
+builder.Services.AddSingleton<IClaimsTransformation, WindowsRolesToClaimsTransformer>();
 
 builder.Services.AddAuthorization(options =>
 {
