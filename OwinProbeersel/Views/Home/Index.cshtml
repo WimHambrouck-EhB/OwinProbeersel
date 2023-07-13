@@ -1,19 +1,38 @@
 ﻿@using System.Security.Principal;
+
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    @{
-        WindowsIdentity? user = User.Identity as WindowsIdentity;
-
-        if (user?.Groups != null)
+    <ul>
+@*        @foreach (var claim in User.Claims)
         {
-            foreach (var group in user.Groups)
+            <li>
+                Type: @claim.Type - Value: @claim.Value<br />
+                <ol>
+                    @foreach (var prop in claim.Properties)
+                    {
+                        <li>
+                            Key: @prop.Key - Value: @prop.Value
+                        </li>
+                    }
+                </ol>
+            </li>
+
+        }*@
+
+        @{
+            WindowsIdentity? user = User.Identity as WindowsIdentity;
+
+            if (user?.Groups != null)
             {
-                @group.Translate(typeof(NTAccount)).Value <br />
+                foreach (var group in user.Groups)
+                {
+                    <li>@group.Translate(typeof(NTAccount)).Value</li>
+                }
             }
         }
-    }
+    </ul>
 </div>
