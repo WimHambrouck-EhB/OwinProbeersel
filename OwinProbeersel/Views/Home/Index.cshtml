@@ -4,35 +4,32 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <ul>
+<ul>
 @*        @foreach (var claim in User.Claims)
-        {
-            <li>
-                Type: @claim.Type - Value: @claim.Value<br />
-                <ol>
-                    @foreach (var prop in claim.Properties)
-                    {
-                        <li>
-                            Key: @prop.Key - Value: @prop.Value
-                        </li>
-                    }
-                </ol>
-            </li>
-
-        }*@
-
-        @{
-            WindowsIdentity? user = User.Identity as WindowsIdentity;
-
-            if (user?.Groups != null)
-            {
-                foreach (var group in user.Groups)
+    {
+        <li>
+            Type: @claim.Type - Value: @claim.Value<br />
+            <ol>
+                @foreach (var prop in claim.Properties)
                 {
-                    <li>@group.Translate(typeof(NTAccount)).Value</li>
+                    <li>
+                        Key: @prop.Key - Value: @prop.Value
+                    </li>
                 }
+            </ol>
+        </li>
+
+    }*@
+
+    @{
+        WindowsIdentity? user = User.Identity as WindowsIdentity;
+
+        if (user?.Groups != null)
+        {
+            foreach (var group in user.Groups)
+            {
+                <li>@group.Translate(typeof(NTAccount)).Value</li>
             }
         }
-    </ul>
-</div>
+    }
+</ul>
