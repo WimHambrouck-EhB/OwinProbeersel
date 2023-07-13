@@ -1,23 +1,24 @@
 ﻿@using System.Security.Principal;
+@using System.DirectoryServices.AccountManagement;
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <ul>
-@*        @foreach (var claim in User.Claims)
+    @*        @foreach (var claim in User.Claims)
     {
-        <li>
-            Type: @claim.Type - Value: @claim.Value<br />
-            <ol>
-                @foreach (var prop in claim.Properties)
-                {
-                    <li>
-                        Key: @prop.Key - Value: @prop.Value
-                    </li>
-                }
-            </ol>
-        </li>
+    <li>
+    Type: @claim.Type - Value: @claim.Value<br />
+    <ol>
+    @foreach (var prop in claim.Properties)
+    {
+    <li>
+    Key: @prop.Key - Value: @prop.Value
+    </li>
+    }
+    </ol>
+    </li>
 
     }*@
 
@@ -33,3 +34,31 @@
         }
     }
 </ul>
+<hl />
+
+@{
+    using (var principalContext = new PrincipalContext(ContextType.Domain, "EHB"))
+    {
+        var domainUsers = new List<Principal>();
+        var userPrinciple = new UserPrincipal(principalContext);
+
+        using var searchResult = new PrincipalSearcher(userPrinciple);
+        domainUsers.AddRange(searchResult.FindAll().Where(domainUser => domainUser.DisplayName != null).Select(domainUser => domainUser));
+
+        // output domain users
+        foreach (var domainUser in domainUsers)
+        {
+            <li>
+                @domainUser.DisplayName
+                <ol>
+                    @foreach (var group in domainUser.GetGroups())
+                    {
+                        <li>@group.Name</li>
+                    }
+                </ol>
+            </li>
+        }
+    }
+}
+
+
